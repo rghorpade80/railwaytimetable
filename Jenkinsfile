@@ -3,6 +3,8 @@ pipeline {
     environment {
         //be sure to replace "willbla" with your own Docker Hub username
         DOCKER_IMAGE_NAME = "rghorpade80/railwaytt"
+        //GIT_COMMIT jenkins variable to tag docker images (first 7 chra of git commit hash)
+        SHORT_COMMIT = "${GIT_COMMIT[0..7]}"
     }
     
     options {
@@ -37,7 +39,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                        app.push("${env.GIT_COMMIT}")
+                        app.push("${SHORT_COMMIT}")
                         app.push("latest")
                     }
                 }
